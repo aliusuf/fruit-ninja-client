@@ -258,9 +258,11 @@ const promoDialogEligible = document.getElementById("promo-dialog-eligible");
 const promoCodeText = document.getElementById("promo-code-text");
 const copyButton = document.getElementById("copy-button");
 let promoData = {};
+const apiURL =
+  "http://fruitninjanode-env.eba-22efqbpa.us-east-2.elasticbeanstalk.com";
 
 function initPromo() {
-  fetch("http://localhost:8000/api/promo")
+  fetch(`${apiURL}/api/promo`)
     .then((response) => response.json())
     .then((json) => {
       promoData = json.promo;
@@ -269,7 +271,7 @@ function initPromo() {
     .catch((error) => console.error("Error initializing data:", error));
 }
 function deletePromo(id) {
-  fetch(`http://localhost:8000/api/promo/${id}`, {
+  fetch(`${apiURL}/api/promo/${id}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
@@ -280,7 +282,7 @@ function deletePromo(id) {
 window.onload = initPromo;
 
 promoButton.addEventListener("click", function () {
-  document.getElementById("myPopup").style.display = "block";
+  document.getElementById("myPopup").style.display = "flex";
 });
 
 copyButton.addEventListener("click", function () {
@@ -295,7 +297,7 @@ copyButton.addEventListener("click", function () {
 });
 
 function openPopup() {
-  document.getElementById("myPopup").style.display = "block";
+  document.getElementById("myPopup").style.display = "flex";
 }
 
 function closePopup() {
@@ -315,7 +317,7 @@ function submitForm(event) {
     phone: phone,
   };
 
-  fetch("http://localhost:8000/api/user", {
+  fetch(`${apiURL}/api/user`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

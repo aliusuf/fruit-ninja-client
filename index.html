@@ -18,7 +18,7 @@
         background-size: cover;
       }
       body canvas {
-        height: calc(100vh - 100px) !important;
+        height: calc(100vh - 30px) !important;
         width: 100% !important;
         object-fit: contain !important;
         overflow: hidden;
@@ -40,16 +40,20 @@
       }
 
       .promo-dialog {
-        display: none;
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: white;
         padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        max-width: 400px;
         min-width: 400px;
         font-family: sans-serif;
+        background: url("images/background.jpg");
+        margin-top: 5rem;
+      }
+
+      .promo-dialog img {
+        width: 100%;
       }
 
       .promo-code {
@@ -57,6 +61,9 @@
         flex-direction: column;
         align-items: center;
         margin-bottom: 20px;
+        margin-top: 2rem;
+        color: #fff;
+        font-size: 2rem;
       }
 
       .promo-code p {
@@ -65,10 +72,12 @@
       }
 
       .promo-code h3 {
-        font-size: 24px;
+        font-size: 3rem;
         font-weight: bold;
         margin: 0;
         text-align: center;
+        background: #df251b;
+        padding: 0rem 2rem;
       }
 
       #copy-button,
@@ -87,8 +96,20 @@
       }
 
       .rem_time {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 1.8rem;
         color: #fff;
         font-family: Arial, Helvetica, sans-serif;
+        min-width: 40px;
+      }
+
+      .rem_time .timer {
+        position: absolute;
+        left: 48%;
+        top: 50%;
+        transform: translate(-50%, -50%);
       }
 
       .popup {
@@ -98,10 +119,68 @@
         z-index: 1;
         left: 0;
         top: 0;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5);
+        background: url("images/background.jpg");
+        justify-content: center;
+        align-items: center;
+      }
+
+      .popup .head {
+        position: absolute;
+        left: 50%;
+        top: 2.5rem;
+        transform: translateX(-50%);
+        min-width: 350px;
+        z-index: 10;
+      }
+
+      .popup .bottom {
+        position: absolute;
+        left: 50%;
+        bottom: 2.5rem;
+        transform: translateX(-50%);
+        min-width: 350px;
+        z-index: 10;
+      }
+
+      .popup .bottom h1,
+      .popup .bottom h2 {
+        color: #fff;
+      }
+
+      .popup .bottom h2 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 2.4rem;
+        margin-top: 0px;
+      }
+
+      .popup .bottom h1 {
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+
+      .popup .head img {
+        width: 100%;
+      }
+
+      .popup .head h1,
+      .popup .head h5 {
+        color: #fff;
+      }
+
+      .popup .head h1 {
+        margin-top: 0.2rem;
+        margin-bottom: 0px;
+      }
+
+      .popup .head h5 {
+        margin-top: 0px;
+        margin-bottom: 0px;
       }
 
       .popup form {
@@ -111,25 +190,33 @@
         margin-left: auto;
         margin-right: auto;
         align-items: start;
+        padding-top: 3rem;
       }
 
       .popup form input {
-        width: 90%;
-        height: 30px;
-        border-radius: 5px;
-        border: 1px solid #000;
-        padding: 0rem 1rem;
-        margin-bottom: 1rem;
+        width: 100%;
+        border: none;
+        padding: 0.5rem 1rem;
+      }
+
+      .popup form input:focus {
+        outline: none;
       }
 
       .popup form button {
         width: 50%;
         height: 35px;
         border-radius: 5px;
-        background: blue;
+        margin-top: 2rem;
         color: #fff;
         border: none;
-        margin-left: auto; margin-right: auto;cursor: pointer;
+        margin-left: auto;
+        margin-right: auto;
+        cursor: pointer;
+      }
+
+      .popup form button img {
+        width: 100%;
       }
 
       .popup-content {
@@ -137,9 +224,26 @@
         margin: 15% auto;
         padding: 20px;
         border: 1px solid #888;
-        max-width: 600px;
+        max-width: 500px;
         width: 100%;
         border-radius: 5px;
+        margin-top: 24rem;
+        padding-bottom: 2rem;
+      }
+
+      .popup-content .form-field {
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid #df251b;
+        width: 100%;
+        padding-top: 1rem;
+      }
+
+      .popup-content .form-field label {
+        display: flex;
+        gap: 0.5rem;
+        white-space: nowrap;
+        font-weight: 600;
       }
 
       .close {
@@ -161,6 +265,10 @@
         body canvas {
           height: 100vh !important;
         }
+
+        .popup-content {
+          margin-top: 10rem;
+        }
       }
     </style>
 
@@ -175,58 +283,106 @@
     </div>
 
     <h5 style="display: none" class="rem_time">
-      Remaining Time: <span class="timer"></span>s
+      <img src="images/Timer.png" alt="" /> <span class="timer"></span>
     </h5>
-    <div class="promo-dialog" id="promo-dialog">
-      <div class="promo-code">
-        <p>Your promo code is:</p>
-        <h3 id="promo-code-text">ABC123</h3>
+
+    <div class="popup" id="promo-dialog">
+      <div class="head">
+        <img src="images/fruit.png" alt="" />
+        <h1>WORLD'S NO. 1</h1>
+        <h5>SELLING GERM PROTECTION SOAP''</h5>
       </div>
-      <button id="copy-button">Copy Code</button>
-      <button class="reset" onclick="window.location.reload()">Reset</button>
+
+      <div class="promo-dialog">
+        <img src="images/end.jpg" alt="" />
+        <div class="promo-code">
+          <h3 id="promo-code-text">ABC123</h3>
+        </div>
+        <button id="copy-button">Copy Code</button>
+        <button class="reset" onclick="window.location.reload()">Reset</button>
+      </div>
     </div>
 
     <div class="popup" id="myPopup">
+      <div class="head">
+        <img src="images/fruit.png" alt="" />
+        <h1>WORLD'S NO. 1</h1>
+        <h5>SELLING GERM PROTECTION SOAP''</h5>
+      </div>
+
       <div class="popup-content">
         <span class="close" onclick="closePopup()">&times;</span>
-        <h2>Enter your details</h2>
         <form>
-          <label for="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            placeholder="Enter name"
-          />
-          <label for="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            placeholder="Enter email"
-          />
-          <label for="phone">Phone:</label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            required
-            placeholder="Enter phone"
-          />
-          <button type="submit">Submit</button>
+          <div class="form-field">
+            <label for="name">* Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Enter name"
+            />
+          </div>
+          <div class="form-field">
+            <label for="email">* Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="Enter email"
+            />
+          </div>
+          <div class="form-field">
+            <label for="country">* Country</label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              required
+              placeholder="Enter country"
+            />
+          </div>
+          <div class="form-field">
+            <label for="phone">* Phone</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              required
+              placeholder="Enter phone"
+            />
+          </div>
+          <button type="submit">
+            <img src="images/button.png" alt="" />
+          </button>
         </form>
       </div>
-    </div>
 
-    <div class="promo-dialog" id="promo-dialog-eligible">
-      <div class="promo-code">
-        <p>You are not eligible for promo code</p>
+      <div class="bottom">
+        <h1>You've Destroyed</h1>
+        <h2>08 <img src="images/score-1.png" alt="" /></h2>
       </div>
-      <button class="reset" onclick="window.location.reload()">Play again</button>
     </div>
 
+    <div class="popup" id="promo-dialog-eligible">
+      <div class="head">
+        <img src="images/fruit.png" alt="" />
+        <h1>WORLD'S NO. 1</h1>
+        <h5>SELLING GERM PROTECTION SOAP''</h5>
+      </div>
+
+      <div style="margin-top: 2rem" class="promo-dialog">
+        <div class="promo-code">
+          <h3>You are not eligible for promo code</h3>
+        </div>
+        <br />
+        <br />
+        <button class="reset" onclick="window.location.reload()">
+          Play again
+        </button>
+      </div>
+    </div>
 
     <!-- P5JS LIBRARY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
